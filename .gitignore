@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+data.bin
+HW1.pdf
+.DS_Store
+.idea
+sources/rexec.macos
+sources/config.toml
+sources/build/
