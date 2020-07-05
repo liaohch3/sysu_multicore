@@ -26,6 +26,8 @@ int main() {
         return -1;
     }
 
+    int count = 0;
+
     // Read in and process the samples one-by-one
     int width, height, size;
     float *sample, *result;
@@ -78,6 +80,12 @@ int main() {
         sample = NULL;
         free(result);
         result = NULL;
+
+        // TODO 下掉这段测试逻辑
+        count++;
+        if(count == 4){
+            break;
+        }
     }
 
     // Close the output stream

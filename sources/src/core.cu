@@ -1,9 +1,32 @@
 #include "core.h"
+#define NUMLEN 16
 
-__global__ void kernel(int size, float *input, float *output) {
-    int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < size) {
-        output[idx] = logf(1 / (1 + input[idx]));
+__global__ void kernel(int width, int height, float *input, float *output) {
+    for(int i = 0; i < width; i++){
+        for(int j = 0; j < height; j++){
+
+            int sum = 0;
+            int counts[NUMLEN] = {0};
+            for(int m = i-2; m <= i+2; m++){
+                for(int n = j-2; n <= j+2; n++){
+                    if(0 <= m && m < height && 0 <= n && n < width){
+                        int num = input[m*width+n];
+                        counts[num]++;
+                        sum++;
+                    }
+                }
+            }
+
+            double res = logf(sum);
+            for(int m = 0; m < NUMLEN; m++){
+                int count = counts[m];
+                if(count != 0){
+                    res -= count * logf(count) / sum;
+                }
+            }
+
+            output[i*width+j] = res;
+        }
     }
 }
 
@@ -17,7 +40,7 @@ void cudaCallback(int width, int height, float *sample, float **result) {
     CHECK(cudaMemcpy(input_d, sample, sizeof(float)*size, cudaMemcpyHostToDevice));
 
     // Invoke the device function
-    kernel<<< divup(size, 1024), 1024 >>>(size, input_d, output_d);
+    kernel<<< 1, 1 >>>(width, height, input_d, output_d);
     cudaDeviceSynchronize();
 
     // Copy back the results and de-allocate the device memory
