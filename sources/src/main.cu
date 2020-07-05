@@ -26,6 +26,12 @@ int main() {
         return -1;
     }
 
+    float tmp[26] = {0.0};
+    for (int i = 1; i <= 25; i++){
+        tmp[i] = i * logf(i);
+    }
+    cudaMemcpyToSymbol(logRes, tmp, 26 * sizeof(float));
+
     int count = 0;
 
     // Read in and process the samples one-by-one

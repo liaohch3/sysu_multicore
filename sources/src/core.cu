@@ -1,7 +1,5 @@
 #include "core.h"
 
-const int NUMLEN = 16;
-
 __global__ void kernel(int width, int height, float *input, float *output) {
     int i = blockIdx.x / width;
     int j = blockIdx.x % width;
@@ -14,16 +12,15 @@ __global__ void kernel(int width, int height, float *input, float *output) {
                 int num = input[m*width+n];
                 counts[num]++;
                 sum++;
-
             }
         }
     }
 
     double res = logf(sum);
-    for(int m = 1; m < NUMLEN; m++){
+    for(int m = 0; m < NUMLEN; m++){
         int count = counts[m];
         if(count != 0){
-            res -= count * logf(count) / sum;
+            res -= logRes[count] / sum;
         }
     }
 
