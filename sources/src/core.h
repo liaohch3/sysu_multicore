@@ -20,6 +20,9 @@ extern void cudaCallback(int width, int height, float *sample, float **result);
 // divup calculates n / m and would round it up if the remainder is non-zero.
 extern int divup(int n, int m);
 
+const int NUMLEN = 16;
+__constant__ float logRes[26] = {0};
+
 // CHECK macro from Grossman and McKercher, "Professional CUDA C Programming"
 #define CHECK(call)                                         \
 {                                                           \
