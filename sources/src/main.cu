@@ -26,6 +26,8 @@ int main() {
         return -1;
     }
 
+    int count = 0;
+
     // Read in and process the samples one-by-one
     int width, height, size;
     float *sample, *result;
@@ -35,6 +37,7 @@ int main() {
         if (printSample) {
             // Print out a small portion of the sample
             printf("sample:\n");
+            printf("No. %d, width: %d, height: %d, size: %d\n", count, width, height, size);
             for (int j = height - 5; j < height; j++) {
                 for (int i = width - 5; i < width; i++) {
                     printf("%8.5f ", sample[j*width+i]);
@@ -78,6 +81,12 @@ int main() {
         sample = NULL;
         free(result);
         result = NULL;
+
+        // // TODO 下掉这段测试逻辑
+        count++;
+        // if(count == 1){
+        //     break;
+        // }
     }
 
     // Close the output stream
